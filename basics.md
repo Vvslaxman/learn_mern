@@ -484,3 +484,281 @@ function ThemedButton() {
 Use **props** for specific, controlled data sharing.
 Use **context** when you need to share **state globally or deeply** across many layers.
 
+Perfect — let’s **master Node.js** step by step **from scratch to advanced**, so you can ace any **Node.js interview** question, build **robust backend APIs**, and **connect it later with MongoDB, React, and Express**.
+
+---
+
+## ✅ NODE.JS — FROM SCRATCH TO PRO INTERVIEW LEVEL
+
+### 🔷 What is Node.js?
+
+* **Node.js** is a **JavaScript runtime built on Chrome's V8 engine**.
+* It lets you run **JavaScript on the server** (outside the browser).
+* It uses **non-blocking I/O** (asynchronous), perfect for fast APIs and microservices.
+
+📌 **Use cases**:
+
+* REST APIs
+* Real-time apps (chat, notifications)
+* File system tools (CLI tools)
+* Microservices and backend logic
+
+---
+
+## 📦 1. Setting Up Node.js Project
+
+```bash
+mkdir node-crash
+cd node-crash
+npm init -y       # creates package.json
+```
+
+Install packages:
+
+```bash
+npm install express cors dotenv
+```
+
+Create an entry file:
+
+```bash
+touch index.js
+```
+
+---
+
+## 🔑 2. Core Concepts of Node.js
+
+### ✅ `require` and `module.exports`
+
+```js
+// greet.js
+function sayHello(name) {
+  return `Hello, ${name}`;
+}
+module.exports = sayHello;
+
+// index.js
+const sayHello = require('./greet');
+console.log(sayHello("Skailama"));  // Hello, Skailama
+```
+
+---
+
+### ✅ Built-in Core Modules
+
+1. **`fs`** – File system
+2. **`path`** – Work with file paths
+3. **`os`** – System info
+4. **`http`** – Build web servers
+
+#### 🔸 `fs` Example:
+
+```js
+const fs = require('fs');
+fs.writeFileSync('file.txt', 'Hello from Node!');
+const data = fs.readFileSync('file.txt', 'utf8');
+console.log(data); // Hello from Node!
+```
+
+#### 🔸 `http` Server:
+
+```js
+const http = require('http');
+
+http.createServer((req, res) => {
+  res.write('Server Running');
+  res.end();
+}).listen(3000);
+```
+
+---
+
+## 🧠 3. Event-Driven & Async Programming
+
+### ✅ Event Loop
+
+* Node.js handles concurrent operations using an **event loop**.
+
+### ✅ Callbacks
+
+```js
+fs.readFile('file.txt', 'utf8', (err, data) => {
+  if (err) return console.error(err);
+  console.log(data);
+});
+```
+
+### ✅ Promises
+
+```js
+const readFile = (file) => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(file, 'utf8', (err, data) => {
+      if (err) reject(err);
+      else resolve(data);
+    });
+  });
+};
+
+readFile('file.txt').then(console.log).catch(console.error);
+```
+
+### ✅ Async/Await
+
+```js
+const read = async () => {
+  try {
+    const data = await readFile('file.txt');
+    console.log(data);
+  } catch (err) {
+    console.error(err);
+  }
+};
+read();
+```
+
+---
+
+## 🛠 4. Building a Node.js REST API (without Express)
+
+```js
+const http = require('http');
+const fs = require('fs');
+
+const server = http.createServer((req, res) => {
+  if (req.url === "/api") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ message: "Hello from raw Node.js API" }));
+  }
+});
+
+server.listen(5000, () => console.log("Server on 5000"));
+```
+
+---
+
+## 🌐 5. NPM Modules & `package.json`
+
+* `npm install axios` — installs 3rd party module
+* `npm install -D nodemon` — for dev-only auto reload
+
+### `package.json`:
+
+```json
+{
+  "name": "app",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  }
+}
+```
+
+Run in dev mode:
+
+```bash
+npm run dev
+```
+
+---
+
+## 🔁 6. Environment Variables with `dotenv`
+
+Install:
+
+```bash
+npm i dotenv
+```
+
+`.env`:
+
+```
+PORT=5000
+```
+
+Usage:
+
+```js
+require('dotenv').config();
+const port = process.env.PORT || 3000;
+```
+
+---
+
+## 🔐 7. Important Interview Concepts
+
+| Concept              | Explain                                             |
+| -------------------- | --------------------------------------------------- |
+| **Single-threaded**  | Uses one thread with event loop for concurrency     |
+| **Non-blocking I/O** | Async operations so server isn’t blocked            |
+| **Event loop**       | Handles async callbacks in phases                   |
+| **Streams**          | For handling large data efficiently (videos, files) |
+| **Buffer**           | Raw binary data                                     |
+| **Cluster**          | For scaling Node.js using multiple cores            |
+
+---
+
+## 🎯 Hands-On Challenge for You
+
+Build a **mini CLI tool** that:
+
+* Takes input from the user (`process.argv`)
+* Writes it into a file using `fs`
+* Reads the file and logs to console
+
+Example:
+
+```bash
+node cli.js "Skailama is awesome"
+```
+
+---
+
+## 🧪 Node.js Sample Interview Questions
+
+1. **How does Node.js handle concurrency if it's single-threaded?**
+
+   * Event loop and callback queue handle multiple requests asynchronously using non-blocking I/O.
+
+2. **What is the difference between synchronous and asynchronous functions in Node?**
+
+   * Sync blocks the execution, async continues the execution while waiting for callback.
+
+3. **What are streams and buffers in Node.js?**
+
+   * Streams let you read/write data in chunks (e.g., video file).
+   * Buffers are used to temporarily store binary data.
+
+4. **What is `process.nextTick()` vs `setImmediate()`?**
+
+   * `nextTick()` runs before I/O tasks; `setImmediate()` after.
+
+5. **What is a middleware in context of Express/Node?**
+
+   * A function that runs before final route logic to manipulate `req` or `res`.
+
+---
+
+## ✅ Summary Cheatsheet
+
+| Feature    | Summary                              |
+| ---------- | ------------------------------------ |
+| Node.js    | Server-side JS runtime               |
+| Modules    | `require()`, `module.exports`        |
+| Built-ins  | `fs`, `http`, `path`, `os`           |
+| Async      | `callback`, `promise`, `async/await` |
+| API Server | `http.createServer()`                |
+| NPM        | Manage dependencies                  |
+| Env        | `dotenv`, `process.env`              |
+| Event loop | Handles all async tasks in phases    |
+
+---
+
+## 🚀 Ready to Continue?
+
+Say **“Next: Express.js”** to dive into how to build APIs, routers, middleware, and auth-ready backends using Express.
+
+Let’s keep crushing it.
+
+
