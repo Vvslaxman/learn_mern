@@ -1003,3 +1003,229 @@ app.use('/static', express.static('public'));
 
 ---
 
+
+# 🧠 MongoDB + Mongoose – From Scratch to Advanced
+
+> 📦 MongoDB is a **NoSQL database** that stores data as **JSON-like documents**.
+>
+> 🛠️ Mongoose is an **ODM** (Object Data Modeling) library for MongoDB in Node.js that helps you:
+>
+> * define schemas
+> * model relationships
+> * validate data
+> * interact with MongoDB easily
+
+---
+
+## ✅ 1. Setup MongoDB + Mongoose
+
+### Step 1: Install
+
+```bash
+npm install mongoose
+```
+
+### Step 2: Connect to MongoDB
+
+If you're using **MongoDB Atlas** (recommended for interviews or real apps):
+
+```js
+const mongoose = require('mongoose');
+const MONGO_URI = process.env.MONGO_URI;
+
+mongoose.connect(MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log("MongoDB Connected"))
+.catch(err => console.log("DB Connection Error", err));
+```
+
+---
+
+## 📄 2. Create a Mongoose Schema & Model
+
+### Example: `Task.js` model
+
+```js
+const mongoose = require('mongoose');
+
+const taskSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  completed: {
+    type: Boolean,
+    default: false
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+const Task = mongoose.model('Task', taskSchema);
+module.exports = Task;
+```
+
+---
+
+## 🛠 3. CRUD Operations with Mongoose
+
+Import the model:
+
+```js
+const Task = require('./models/Task');
+```
+
+### ➕ Create
+
+```js
+app.post('/tasks', async (req, res) => {
+  try {
+    const newTask = new Task(req.body);
+    await newTask.save();
+    res.status(201).json(newTask);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+```
+
+### 📥 Read All
+
+```js
+app.get('/tasks', async (req, res) => {
+  const tasks = await Task.find();
+  res.json(tasks);
+});
+```
+
+### 🖊 Update
+
+```js
+app.put('/tasks/:id', async (req, res) => {
+  const updated = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  res.json(updated);
+});
+```
+
+### ❌ Delete
+
+```js
+app.delete('/tasks/:id', async (req, res) => {
+  await Task.findByIdAndDelete(req.params.id);
+  res.json({ msg: "Deleted Successfully" });
+});
+```
+
+---
+
+## 🧪 4. Advanced Mongoose Features
+
+### ✅ Schema Validation
+
+```js
+title: {
+  type: String,
+  required: [true, "Title is required"],
+  minlength: 3
+}
+```
+
+### 🧬 Data Types
+
+| Type     | Example                                             |
+| -------- | --------------------------------------------------- |
+| String   | `type: String`                                      |
+| Number   | `type: Number`                                      |
+| Boolean  | `type: Boolean`                                     |
+| Date     | `type: Date`                                        |
+| Array    | `type: [String]`                                    |
+| ObjectId | `type: mongoose.Schema.Types.ObjectId, ref: 'User'` |
+
+---
+
+### 🔁 Query Helpers
+
+```js
+await Task.find({ completed: true });
+await Task.findById(taskId);
+await Task.deleteMany({ completed: true });
+```
+
+---
+
+### 🔐 Pre/Post Hooks (Middleware)
+
+```js
+taskSchema.pre('save', function(next) {
+  console.log('Saving task...');
+  next();
+});
+```
+
+---
+
+### 🔗 Population (JOINs in MongoDB)
+
+Example for blog with users:
+
+```js
+// Blog schema
+author: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'User'
+}
+
+// Populate it
+Blog.find().populate('author').exec();
+```
+
+---
+
+## 🧠 Common MongoDB Interview Questions
+
+| Question                               | Sample Answer                                                 |
+| -------------------------------------- | ------------------------------------------------------------- |
+| What is MongoDB?                       | NoSQL, document-based database storing data in JSON           |
+| Why use Mongoose?                      | Adds schema, validation, easy querying to MongoDB             |
+| How to define a schema?                | With `new mongoose.Schema({})`                                |
+| Difference: `.find()` vs `.findById()` | `find()` returns multiple docs, `findById()` only one         |
+| What is `populate()`?                  | Used to simulate JOINs, fetch related docs via references     |
+| What is `lean()` in Mongoose?          | Returns plain JS object instead of Mongoose document (faster) |
+| How to create relationship in MongoDB? | With `ObjectId` + `ref` + `populate()`                        |
+
+---
+
+## ⚡ Hands-On Final Task: Build & Connect to MongoDB
+
+> 💡 Build a **Task Manager** API with:
+
+* `/tasks [POST]` – create
+* `/tasks [GET]` – list
+* `/tasks/:id [PUT]` – update
+* `/tasks/:id [DELETE]` – delete
+* Connect with MongoDB Atlas
+* Add `.env` file and use `process.env.MONGO_URI`
+
+---
+
+## 🧾 Cheat Sheet for Mongoose
+
+| Task          | Code                                 |
+| ------------- | ------------------------------------ |
+| Connect       | `mongoose.connect(uri)`              |
+| Define Schema | `new Schema({})`                     |
+| Create Model  | `mongoose.model('Name', schema)`     |
+| Save          | `doc.save()`                         |
+| Query         | `Model.find({})`, `Model.findById()` |
+| Update        | `Model.findByIdAndUpdate()`          |
+| Delete        | `Model.findByIdAndDelete()`          |
+| Populate      | `Model.find().populate('ref')`       |
+
+---
+
+
