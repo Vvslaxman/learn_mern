@@ -755,10 +755,251 @@ node cli.js "Skailama is awesome"
 
 ---
 
-## 🚀 Ready to Continue?
+Awesome! Let’s now **master Express.js** — the most important backend framework in the MERN stack.
 
-Say **“Next: Express.js”** to dive into how to build APIs, routers, middleware, and auth-ready backends using Express.
+---
 
-Let’s keep crushing it.
+## 🔥 EXPRESS.JS — FROM SCRATCH TO PRO INTERVIEW LEVEL
 
+### 🔷 What is Express.js?
+
+* A **web application framework** for **Node.js**.
+* Helps build APIs, web servers, and apps faster.
+* Think of it as **simplified backend logic** built on top of Node.js’s `http` module.
+
+📌 Used in Skailama-like SaaS apps to:
+
+* Build **RESTful APIs**
+* Add **authentication**
+* Handle **routes**, **middlewares**, **requests/responses**
+
+---
+
+## ⚙️ 1. Setup Express Project
+
+```bash
+mkdir express-api
+cd express-api
+npm init -y
+npm install express cors dotenv
+touch index.js
+```
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+app.use(express.json());
+
+app.get('/', (req, res) => {
+  res.send('Skailama Backend Running');
+});
+
+app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+```
+
+---
+
+## 📌 2. Routes, Params, and CRUD API
+
+### Basic Routing
+
+```js
+app.get('/hello', (req, res) => {
+  res.send('Hello World');
+});
+```
+
+### Route with Params
+
+```js
+app.get('/user/:id', (req, res) => {
+  res.send(`User ID: ${req.params.id}`);
+});
+```
+
+### RESTful CRUD Example
+
+```js
+let users = [];
+
+app.post('/users', (req, res) => {
+  const user = req.body;
+  users.push(user);
+  res.status(201).json({ msg: 'User created', user });
+});
+
+app.get('/users', (req, res) => res.json(users));
+
+app.put('/users/:id', (req, res) => {
+  const id = req.params.id;
+  const updated = req.body;
+  users[id] = updated;
+  res.json({ msg: 'User updated', updated });
+});
+
+app.delete('/users/:id', (req, res) => {
+  const id = req.params.id;
+  users.splice(id, 1);
+  res.json({ msg: 'User deleted' });
+});
+```
+
+---
+
+## 🔐 3. Middleware in Express
+
+### ✅ What is Middleware?
+
+* Functions that **run before** route handlers.
+* Used for **auth**, **validation**, **logging**, etc.
+
+```js
+// Custom middleware
+const logger = (req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next(); // Move to next middleware or route
+};
+
+app.use(logger);
+```
+
+---
+
+## 🌍 4. Working with JSON & Body Data
+
+```js
+app.use(express.json());  // parse JSON body
+```
+
+```js
+app.post('/data', (req, res) => {
+  const data = req.body;
+  res.json({ received: data });
+});
+```
+
+---
+
+## 🌐 5. Enable CORS (Cross-Origin)
+
+Install:
+
+```bash
+npm install cors
+```
+
+Use:
+
+```js
+const cors = require('cors');
+app.use(cors());  // allow all origins
+```
+
+---
+
+## 🗂 6. Split Routes into Files
+
+👉 Clean architecture for large apps:
+
+### `/routes/userRoutes.js`
+
+```js
+const express = require('express');
+const router = express.Router();
+
+router.get('/', (req, res) => {
+  res.send("User route root");
+});
+
+module.exports = router;
+```
+
+### `index.js`
+
+```js
+const userRoutes = require('./routes/userRoutes');
+app.use('/users', userRoutes);
+```
+
+---
+
+## ✅ 7. Environment Setup with `.env`
+
+```bash
+npm install dotenv
+```
+
+`.env`:
+
+```
+PORT=5000
+```
+
+```js
+require('dotenv').config();
+```
+
+---
+
+## 🧪 8. Error Handling Middleware
+
+```js
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+```
+
+---
+
+## 📁 9. Serve Static Files
+
+```js
+app.use('/static', express.static('public'));
+
+// GET /static/logo.png → /public/logo.png
+```
+
+---
+
+## 🧠 Express.js Interview Questions
+
+| Question                                                   | Sample Answer                                                                        |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| What is Express?                                           | Lightweight framework on top of Node.js for building APIs and web servers            |
+| What is middleware?                                        | Functions that execute before route handlers, used for logging, auth, error handling |
+| What’s the difference between `app.use()` and `app.get()`? | `use()` is for middleware, `get()` is for GET route                                  |
+| How do you structure a large Express app?                  | Separate into routes, controllers, middlewares                                       |
+| How is error handling done in Express?                     | Using error-handling middleware: `app.use((err, req, res, next) => {})`              |
+| What is the role of `next()`?                              | It passes control to the next middleware/handler                                     |
+
+---
+
+## ⚡️ Final Express.js Practice Task
+
+### Build a mini CRUD API:
+
+* `POST /tasks` – add task
+* `GET /tasks` – get all
+* `PUT /tasks/:id` – update task
+* `DELETE /tasks/:id` – delete task
+
+---
+
+## 🚀 Summary Cheatsheet
+
+| Feature           | Summary                               |
+| ----------------- | ------------------------------------- |
+| Setup             | `npm install express cors dotenv`     |
+| Routing           | `app.get()`, `app.post()` etc.        |
+| Params            | `req.params`, `req.body`, `req.query` |
+| Middleware        | Auth, logging, error handling         |
+| CORS              | Allow front-end access                |
+| Env               | Store port/API keys securely          |
+| Project Structure | Modularize routes/controllers         |
+
+---
 
